@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <UserSecretsId>dotnet-YourList-98E2C25F-789E-458F-8394-F4CDE850714E</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="EasyConfigStandard" Version="1.0.0.2" />
+        <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="1.1.1" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0-preview.6.20305.6" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="5.0.0-preview.6.20306.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\YourList\YourList.csproj" />
+    </ItemGroup>
+</Project>
