@@ -2,10 +2,7 @@ using System.Net.Http;
 
 namespace YourList.Exceptions
 {
-    /// <summary>
-    ///     Exception thrown when a transient failure occurs.
-    /// </summary>
-    public partial class TransientFailureException : YoutubeExplodeException
+    public class TransientFailureException : YoutubeExplodeException
     {
         /// <summary>
         ///     Initializes an instance of <see cref="TransientFailureException" />.
@@ -14,10 +11,7 @@ namespace YourList.Exceptions
             : base(message)
         {
         }
-    }
 
-    public partial class TransientFailureException
-    {
         internal static TransientFailureException FailedHttpRequest(HttpResponseMessage response)
         {
             var message = $@"

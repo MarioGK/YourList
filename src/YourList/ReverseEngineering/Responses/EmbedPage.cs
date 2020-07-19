@@ -60,11 +60,11 @@ namespace YourList.ReverseEngineering.Responses
             return new EmbedPage(Html.Parse(raw));
         }
 
-        public static async Task<EmbedPage> GetAsync(YoutubeHttpClient httpClient, string videoId)
+        public static async Task<EmbedPage> GetAsync(YoutubeHttpClient httpClient, string id)
         {
             return await Retry.WrapAsync(async () =>
             {
-                var url = $"https://youtube.com/embed/{videoId}?hl=en";
+                var url = $"https://youtube.com/embed/{id}?hl=en";
                 var raw = await httpClient.GetStringAsync(url);
 
                 return Parse(raw);

@@ -43,28 +43,28 @@ namespace YourList.Videos.Streams
             return await DashManifest.GetAsync(_httpClient, dashManifestUrl);
         }
 
-        private async Task<StreamContext> GetSteamContextFromVideoInfoAsync(VideoId videoId)
+        private async Task<StreamContext> GetSteamContextFromVideoInfoAsync(string id)
         {
-            var embedPage = await EmbedPage.GetAsync(_httpClient, videoId);
+            var embedPage = await EmbedPage.GetAsync(_httpClient, id);
             var playerConfig =
                 embedPage.TryGetPlayerConfig() ??
-                throw VideoUnplayableException.Unplayable(videoId);
+                throw VideoUnplayableException.Unplayable(id);
 
             var playerSource = await PlayerSource.GetAsync(_httpClient, playerConfig.GetPlayerSourceUrl());
             var cipherOperations = playerSource.GetCipherOperations().ToArray();
 
-            var videoInfoResponse = await VideoInfoResponse.GetAsync(_httpClient, videoId, playerSource.GetSts());
+            var videoInfoResponse = await VideoInfoResponse.GetAsync(_httpClient, id, playerSource.GetSts());
             var playerResponse = videoInfoResponse.GetPlayerResponse();
 
-            var previewVideoId = playerResponse.TryGetPreviewVideoId();
-            if (!string.IsNullOrWhiteSpace(previewVideoId))
-                throw VideoRequiresPurchaseException.Preview(videoId, previewVideoId);
+            var previewstring = playerResponse.TryGetPreviewstring();
+            if (!string.IsNullOrWhiteSpace(previewstring))
+                throw VideoRequiresPurchaseException.Preview(id, previewstring);
 
             if (!playerResponse.IsVideoPlayable())
-                throw VideoUnplayableException.Unplayable(videoId, playerResponse.TryGetVideoPlayabilityError());
+                throw VideoUnplayableException.Unplayable(id, playerResponse.TryGetVideoPlayabilityError());
 
             if (playerResponse.IsLive())
-                throw VideoUnplayableException.LiveStream(videoId);
+                throw VideoUnplayableException.LiveStream(id);
 
             var streamInfoProviders = new List<IStreamInfoProvider>();
 
@@ -85,27 +85,27 @@ namespace YourList.Videos.Streams
             return new StreamContext(streamInfoProviders, cipherOperations);
         }
 
-        private async Task<StreamContext> GetStreamContextFromWatchPageAsync(VideoId videoId)
+        private async Task<StreamContext> GetStreamContextFromWatchPageAsync(string id)
         {
-            var watchPage = await WatchPage.GetAsync(_httpClient, videoId);
+            var watchPage = await WatchPage.GetAsync(_httpClient, id);
             var playerConfig =
                 watchPage.TryGetPlayerConfig() ??
-                throw VideoUnplayableException.Unplayable(videoId);
+                throw VideoUnplayableException.Unplayable(id);
 
             var playerResponse = playerConfig.GetPlayerResponse();
 
-            var previewVideoId = playerResponse.TryGetPreviewVideoId();
-            if (!string.IsNullOrWhiteSpace(previewVideoId))
-                throw VideoRequiresPurchaseException.Preview(videoId, previewVideoId);
+            var previewstring = playerResponse.TryGetPreviewstring();
+            if (!string.IsNullOrWhiteSpace(previewstring))
+                throw VideoRequiresPurchaseException.Preview(id, previewstring);
 
             var playerSource = await PlayerSource.GetAsync(_httpClient, playerConfig.GetPlayerSourceUrl());
             var cipherOperations = playerSource.GetCipherOperations().ToArray();
 
             if (!playerResponse.IsVideoPlayable())
-                throw VideoUnplayableException.Unplayable(videoId, playerResponse.TryGetVideoPlayabilityError());
+                throw VideoUnplayableException.Unplayable(id, playerResponse.TryGetVideoPlayabilityError());
 
             if (playerResponse.IsLive())
-                throw VideoUnplayableException.LiveStream(videoId);
+                throw VideoUnplayableException.LiveStream(id);
 
             var streamInfoProviders = new List<IStreamInfoProvider>();
 
@@ -236,19 +236,19 @@ namespace YourList.Videos.Streams
         /// <summary>
         ///     Gets the manifest that contains information about available streams in the specified video.
         /// </summary>
-        public async Task<StreamManifest> GetManifestAsync(VideoId videoId)
+        public async Task<StreamManifest> GetManifestAsync(string id)
         {
             // We can try to extract the manifest from two sources: get_video_info and the video watch page.
             // In some cases one works, in some cases another does.
 
             try
             {
-                var context = await GetSteamContextFromVideoInfoAsync(videoId);
+                var context = await GetSteamContextFromVideoInfoAsync(id);
                 return await GetManifestAsync(context);
             }
             catch (YoutubeExplodeException)
             {
-                var context = await GetStreamContextFromWatchPageAsync(videoId);
+                var context = await GetStreamContextFromWatchPageAsync(id);
                 return await GetManifestAsync(context);
             }
         }
@@ -256,16 +256,16 @@ namespace YourList.Videos.Streams
         /// <summary>
         ///     Gets the HTTP Live Stream (HLS) manifest URL for the specified video (if it's a live video stream).
         /// </summary>
-        public async Task<string> GetHttpLiveStreamUrlAsync(VideoId videoId)
+        public async Task<string> GetHttpLiveStreamUrlAsync(string id)
         {
-            var videoInfoResponse = await VideoInfoResponse.GetAsync(_httpClient, videoId);
+            var videoInfoResponse = await VideoInfoResponse.GetAsync(_httpClient, id);
             var playerResponse = videoInfoResponse.GetPlayerResponse();
 
             if (!playerResponse.IsVideoPlayable())
-                throw VideoUnplayableException.Unplayable(videoId, playerResponse.TryGetVideoPlayabilityError());
+                throw VideoUnplayableException.Unplayable(id, playerResponse.TryGetVideoPlayabilityError());
 
             return playerResponse.TryGetHlsManifestUrl() ??
-                   throw VideoUnplayableException.NotLiveStream(videoId);
+                   throw VideoUnplayableException.NotLiveStream(id);
         }
 
         /// <summary>

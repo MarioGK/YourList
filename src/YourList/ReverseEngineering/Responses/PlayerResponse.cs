@@ -115,13 +115,13 @@ namespace YourList.ReverseEngineering.Responses
                 .ParseLong();
         }
 
-        public string? TryGetPreviewVideoId()
+        public string? TryGetPreviewstring()
         {
             return _root
                        .GetPropertyOrNull("playabilityStatus")?
                        .GetPropertyOrNull("errorScreen")?
                        .GetPropertyOrNull("playerLegacyDesktopYpcTrailerRenderer")?
-                       .GetPropertyOrNull("trailerVideoId")?
+                       .GetPropertyOrNull("trailerstring")?
                        .GetString() ??
                    _root
                        .GetPropertyOrNull("playabilityStatus")?

@@ -1,16 +1,11 @@
-using YourList.Videos;
-
 namespace YourList.Exceptions
 {
-    /// <summary>
-    ///     Exception thrown when the requested video requires purchase.
-    /// </summary>
-    public partial class VideoRequiresPurchaseException : VideoUnplayableException
+    public class VideoRequiresPurchaseException : VideoUnplayableException
     {
         /// <summary>
         ///     Initializes an instance of <see cref="VideoRequiresPurchaseException" />
         /// </summary>
-        public VideoRequiresPurchaseException(string message, VideoId previewVideoId) : base(message)
+        public VideoRequiresPurchaseException(string message, string previewVideoId) : base(message)
         {
             PreviewVideoId = previewVideoId;
         }
@@ -18,12 +13,9 @@ namespace YourList.Exceptions
         /// <summary>
         ///     ID of a free preview video for this video.
         /// </summary>
-        public VideoId PreviewVideoId { get; }
-    }
+        public string PreviewVideoId { get; }
 
-    public partial class VideoRequiresPurchaseException
-    {
-        internal static VideoRequiresPurchaseException Preview(VideoId videoId, VideoId previewVideoId)
+        internal static VideoRequiresPurchaseException Preview(string videoId, string previewVideoId)
         {
             var message = $@"
 Video '{videoId}' is unplayable because it requires purchase.

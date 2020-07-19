@@ -1,8 +1,6 @@
 using System.Threading.Tasks;
-using YourList.Common;
 using YourList.ReverseEngineering;
 using YourList.ReverseEngineering.Responses;
-using YourList.Videos.ClosedCaptions;
 using YourList.Videos.Streams;
 
 namespace YourList.Videos
@@ -22,7 +20,6 @@ namespace YourList.Videos
             _httpClient = httpClient;
 
             Streams = new StreamsClient(httpClient);
-            ClosedCaptions = new ClosedCaptionClient(httpClient);
         }
 
         /// <summary>
@@ -31,36 +28,17 @@ namespace YourList.Videos
         public StreamsClient Streams { get; }
 
         /// <summary>
-        ///     Queries related to closed captions of YouTube videos.
-        /// </summary>
-        public ClosedCaptionClient ClosedCaptions { get; }
-
-        /// <summary>
         ///     Gets the metadata associated with the specified video.
         /// </summary>
-        public async Task<Video> GetAsync(VideoId id)
+        public async Task<Video> GetAsync(string id)
         {
             var videoInfoResponse = await VideoInfoResponse.GetAsync(_httpClient, id);
             var playerResponse = videoInfoResponse.GetPlayerResponse();
 
             var watchPage = await WatchPage.GetAsync(_httpClient, id);
 
-            return new Video(
-                id,
-                playerResponse.GetVideoTitle(),
-                playerResponse.GetVideoAuthor(),
-                playerResponse.GetVideoChannelId(),
-                playerResponse.GetVideoUploadDate(),
-                playerResponse.GetVideoDescription(),
-                playerResponse.GetVideoDuration(),
-                new ThumbnailSet(id),
-                playerResponse.GetVideoKeywords(),
-                new Engagement(
-                    playerResponse.TryGetVideoViewCount() ?? 0,
-                    watchPage.TryGetVideoLikeCount() ?? 0,
-                    watchPage.TryGetVideoDislikeCount() ?? 0
-                )
-            );
+            //TODO
+            return null;
         }
     }
 }

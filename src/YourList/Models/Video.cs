@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
-using YourList.Channels;
-using YourList.Common;
+using YourList.Models;
 
 namespace YourList.Videos
 {
@@ -14,33 +12,23 @@ namespace YourList.Videos
         ///     Initializes an instance of <see cref="Video" />.
         /// </summary>
         public Video(
-            VideoId id,
+            string id,
             string title,
             string author,
-            ChannelId channelId,
             DateTimeOffset uploadDate,
-            string description,
-            TimeSpan duration,
-            ThumbnailSet thumbnails,
-            IReadOnlyList<string> keywords,
-            Engagement engagement)
+            ThumbnailSet thumbnails)
         {
             Id = id;
             Title = title;
             Author = author;
-            ChannelId = channelId;
             UploadDate = uploadDate;
-            Description = description;
-            Duration = duration;
             Thumbnails = thumbnails;
-            Keywords = keywords;
-            Engagement = engagement;
         }
 
         /// <summary>
         ///     Video ID.
         /// </summary>
-        public VideoId Id { get; }
+        public string Id { get; }
 
         /// <summary>
         ///     Video URL.
@@ -58,39 +46,14 @@ namespace YourList.Videos
         public string Author { get; }
 
         /// <summary>
-        ///     Video channel ID.
-        /// </summary>
-        public ChannelId ChannelId { get; }
-
-        /// <summary>
         ///     Video upload date.
         /// </summary>
         public DateTimeOffset UploadDate { get; }
 
         /// <summary>
-        ///     Video description.
-        /// </summary>
-        public string Description { get; }
-
-        /// <summary>
-        ///     Duration of the video.
-        /// </summary>
-        public TimeSpan Duration { get; }
-
-        /// <summary>
         ///     Available thumbnails for this video.
         /// </summary>
         public ThumbnailSet Thumbnails { get; }
-
-        /// <summary>
-        ///     Search keywords used for this video.
-        /// </summary>
-        public IReadOnlyList<string> Keywords { get; }
-
-        /// <summary>
-        ///     Engagement statistics for this video.
-        /// </summary>
-        public Engagement Engagement { get; }
 
 
         /// <inheritdoc />

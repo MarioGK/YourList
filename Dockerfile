@@ -1,28 +1,13 @@
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 
-# Requirements for the typescript compiler
-RUN apt-get update && \
-  apt-get install npm -y && \
-  npm i -g typescript
-
 COPY src/ ./app/src
 
-WORKDIR app
+WORKDIR /app
 
-RUN dotnet build src/Startup/MUnique.OpenMU.Startup.csproj -c Release -p:ci=true
-
-RUN dotnet publish src/AdminPanel/MUnique.OpenMU.AdminPanel.csproj -o out -c Release --no-build
-RUN dotnet publish src/Startup/MUnique.OpenMU.Startup.csproj -o out -c Release --no-build
+RUN dotnet publish src/YourList.Worker/YourList.Worker.csproj -o out -c Release -p:ci=true
 
 FROM mcr.microsoft.com/dotnet/runtime:5.0 AS runtime
 
-EXPOSE 1234
-EXPOSE 55901
-EXPOSE 55902
-EXPOSE 55903
-EXPOSE 44405
-EXPOSE 55980
-
 WORKDIR /app
 COPY --from=build /app/out ./
-ENTRYPOINT ["dotnet", "MUnique.OpenMU.Startup.dll", "-autostart"]
+ENTRYPOINT ["dotnet", "YourList.Worker.dll", ""]

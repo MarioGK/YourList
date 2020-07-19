@@ -1,0 +1,15 @@
+# Docker compose for postgres and MUnique OpenMU
+version: '3'
+
+services:
+  yourlist:
+    image: mariogk/yourlist
+    container_name: yourlist
+    restart: unless-stopped
+    tty: true
+    volumes:
+        - /mnt/sda/sharex:/app/musics
+    environment:
+      PLAYLIST: "PL8C8IeCbTfzwQVlCCzNLJz1kWkdjeBMqo"
+      SAVE_DIR: "/app/musics:"
+    working_dir: /app/

@@ -137,11 +137,11 @@ namespace YourList.ReverseEngineering.Responses
             return new WatchPage(Html.Parse(raw));
         }
 
-        public static async Task<WatchPage> GetAsync(YoutubeHttpClient httpClient, string videoId)
+        public static async Task<WatchPage> GetAsync(YoutubeHttpClient httpClient, string id)
         {
             return await Retry.WrapAsync(async () =>
             {
-                var url = $"https://youtube.com/watch?v={videoId}&bpctr=9999999999&hl=en";
+                var url = $"https://youtube.com/watch?v={id}&bpctr=9999999999&hl=en";
                 var raw = await httpClient.GetStringAsync(url);
 
                 var result = Parse(raw);
@@ -150,7 +150,7 @@ namespace YourList.ReverseEngineering.Responses
                     throw TransientFailureException.Generic("Video watch page is broken.");
 
                 if (!result.IsVideoAvailable())
-                    throw VideoUnavailableException.Unavailable(videoId);
+                    throw VideoUnavailableException.Unavailable(id);
 
                 return result;
             });

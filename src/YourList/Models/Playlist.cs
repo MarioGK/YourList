@@ -1,6 +1,4 @@
-using YourList.Common;
-
-namespace YourList.Playlists
+namespace YourList.Models
 {
     /// <summary>
     ///     YouTube playlist metadata.
@@ -10,21 +8,19 @@ namespace YourList.Playlists
         /// <summary>
         ///     Initializes an instance of <see cref="Playlist" />.
         /// </summary>
-        public Playlist(PlaylistId id, string title, string? author, string description, ThumbnailSet? thumbnails,
-            Engagement engagement)
+        public Playlist(string id, string title, string? author, string description, ThumbnailSet? thumbnails)
         {
             Id = id;
             Title = title;
             Author = author;
             Description = description;
             Thumbnails = thumbnails;
-            Engagement = engagement;
         }
 
         /// <summary>
         ///     Playlist ID.
         /// </summary>
-        public PlaylistId Id { get; }
+        public string Id { get; }
 
         /// <summary>
         ///     Playlist URL.
@@ -52,11 +48,6 @@ namespace YourList.Playlists
         ///     Can be null if the playlist is empty.
         /// </summary>
         public ThumbnailSet? Thumbnails { get; }
-
-        /// <summary>
-        ///     Engagement statistics.
-        /// </summary>
-        public Engagement Engagement { get; }
 
         /// <inheritdoc />
         public override string ToString()

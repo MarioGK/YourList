@@ -2,10 +2,7 @@ using System.Net.Http;
 
 namespace YourList.Exceptions
 {
-    /// <summary>
-    ///     Exception thrown when YouTube denies a request because the client has exceeded rate limit.
-    /// </summary>
-    public partial class RequestLimitExceededException : YoutubeExplodeException
+    public class RequestLimitExceededException : YoutubeExplodeException
     {
         /// <summary>
         ///     Initializes an instance of <see cref="RequestLimitExceededException" />.
@@ -14,10 +11,7 @@ namespace YourList.Exceptions
             : base(message)
         {
         }
-    }
 
-    public partial class RequestLimitExceededException
-    {
         internal static RequestLimitExceededException FailedHttpRequest(HttpResponseMessage response)
         {
             var message = $@"

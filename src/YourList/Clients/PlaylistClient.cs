@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using YourList.Common;
 using YourList.Internal.Extensions;
+using YourList.Models;
 using YourList.ReverseEngineering;
 using YourList.ReverseEngineering.Responses;
 using YourList.Videos;
@@ -27,7 +27,7 @@ namespace YourList.Playlists
         /// <summary>
         ///     Gets the metadata associated with the specified playlist.
         /// </summary>
-        public async Task<Playlist> GetAsync(PlaylistId id)
+        public async Task<Playlist> GetAsync(string id)
         {
             var response = await PlaylistResponse.GetAsync(_httpClient, id);
 
@@ -42,20 +42,15 @@ namespace YourList.Playlists
                 response.GetTitle(),
                 response.TryGetAuthor(),
                 response.TryGetDescription() ?? "",
-                thumbnails,
-                new Engagement(
-                    response.TryGetViewCount() ?? 0,
-                    response.TryGetLikeCount() ?? 0,
-                    response.TryGetDislikeCount() ?? 0
-                ));
+                thumbnails);
         }
 
         /// <summary>
         ///     Enumerates videos included in the specified playlist.
         /// </summary>
-        public async IAsyncEnumerable<Video> GetVideosAsync(PlaylistId id)
+        public async IAsyncEnumerable<Video> GetVideosAsync(string id)
         {
-            var encounteredVideoIds = new HashSet<string>();
+            var encounteredstrings = new HashSet<string>();
 
             var index = 0;
             while (true)
@@ -68,25 +63,11 @@ namespace YourList.Playlists
                     var videoId = video.GetId();
 
                     // Skip already encountered videos
-                    if (!encounteredVideoIds.Add(videoId))
+                    if (!encounteredstrings.Add(videoId))
                         continue;
 
-                    yield return new Video(
-                        videoId,
-                        video.GetTitle(),
-                        video.GetAuthor(),
-                        video.GetChannelId(),
-                        video.GetUploadDate(),
-                        video.GetDescription(),
-                        video.GetDuration(),
-                        new ThumbnailSet(videoId),
-                        video.GetKeywords(),
-                        new Engagement(
-                            video.GetViewCount(),
-                            video.GetLikeCount(),
-                            video.GetDislikeCount()
-                        )
-                    );
+                    //TODO
+                    yield return null;
 
                     countDelta++;
                 }

@@ -1,11 +1,6 @@
-using YourList.Videos;
-
 namespace YourList.Exceptions
 {
-    /// <summary>
-    ///     Exception thrown when the requested video is unavailable.
-    /// </summary>
-    public partial class VideoUnavailableException : VideoUnplayableException
+    public class VideoUnavailableException : VideoUnplayableException
     {
         /// <summary>
         ///     Initializes an instance of <see cref="VideoUnavailableException" />.
@@ -14,14 +9,11 @@ namespace YourList.Exceptions
             : base(message)
         {
         }
-    }
 
-    public partial class VideoUnavailableException
-    {
-        internal static VideoUnavailableException Unavailable(VideoId videoId)
+        internal static VideoUnavailableException Unavailable(string id)
         {
             var message = $@"
-Video '{videoId}' is unavailable.
+Video '{id}' is unavailable.
 In most cases, this error indicates that the video doesn't exist, is private, or has been taken down.
 If you can however open this video in your browser in incognito mode, it most likely means that YouTube changed something, which broke this library.
 Please report this issue on GitHub in that case.";
